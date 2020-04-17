@@ -7,6 +7,7 @@ This is an outlier scoring method that compares the pathways of each streamline
 in a bundle (pairwise) and scores each streamline by how many other streamlines
 have similar pathways. The details can be found in [Jordan_2018_plm]_.
 
+First import the necessary modules:
 """
 
 from dipy.core.gradients import gradient_table
