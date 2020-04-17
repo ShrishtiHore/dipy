@@ -17,6 +17,7 @@ alignment between neighboring points.
 Let :math:`({\bf y},{\bf n}) \in \mathbb{R}^3\rtimes S^2` where
 :math:`{\bf y} \in \mathbb{R}^{3}` denotes the spatial part, and
 :math:`{\bf n} \in S^2` the angular part.
+
 Let :math:`W:\mathbb{R}^3\rtimes S^2\times \mathbb{R}^{+} \to \mathbb{R}` be
 the function representing the evolution of FOD/ODF field. Then, the contextual
 PDE with evolution time :math:`t\geq 0` is given by:
@@ -84,6 +85,13 @@ from dipy.data import get_fnames, default_sphere
 from dipy.io.image import load_nifti_data
 from dipy.io.gradients import read_bvals_bvecs
 from dipy.sims.voxel import add_noise
+from dipy.reconst.csdeconv import auto_response
+from dipy.reconst.csdeconv import ConstrainedSphericalDeconvModel
+from dipy.denoise.enhancement_kernel import EnhancementKernel
+from dipy.denoise.shift_twist_convolution import convolve
+from dipy.viz import window, actor
+from dipy.reconst.shm import sf_to_sh, sh_to_sf
+from dipy.reconst.csdeconv import odf_sh_to_sharp
 
 # Read data
 hardi_fname, hardi_bval_fname, hardi_bvec_fname = get_fnames('stanford_hardi')
@@ -117,8 +125,6 @@ Deconvolution is used.
 """
 
 # Perform CSD on the original data
-from dipy.reconst.csdeconv import auto_response
-from dipy.reconst.csdeconv import ConstrainedSphericalDeconvModel
 response, ratio = auto_response(gtab, data, roi_radius=10, fa_thr=0.7)
 csd_model_orig = ConstrainedSphericalDeconvModel(gtab, response)
 csd_fit_orig = csd_model_orig.fit(data_small)
@@ -139,8 +145,6 @@ By default, a sphere with 100 directions is used.
 
 """
 
-from dipy.denoise.enhancement_kernel import EnhancementKernel
-from dipy.denoise.shift_twist_convolution import convolve
 
 # Create lookup table
 D33 = 1.0
@@ -152,8 +156,6 @@ k = EnhancementKernel(D33, D44, t)
 Visualize the kernel
 """
 
-from dipy.viz import window, actor
-from dipy.reconst.shm import sf_to_sh, sh_to_sf
 ren = window.Renderer()
 
 # convolve kernel with delta spike
@@ -194,7 +196,6 @@ The Sharpening Deconvolution Transform is applied to sharpen the ODF field.
 """
 
 # Sharpen via the Sharpening Deconvolution Transform
-from dipy.reconst.csdeconv import odf_sh_to_sharp
 csd_shm_enh_sharp = odf_sh_to_sharp(csd_shm_enh, default_sphere, sh_order=8,
                                     lambda_=0.1)
 
