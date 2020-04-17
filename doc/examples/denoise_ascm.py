@@ -3,16 +3,16 @@
 Denoise images using Adaptive Soft Coefficient Matching (ASCM)
 ==============================================================
 
-The adaptive soft coefficient matching (ASCM) as described in [Coupe11]_ is a
+The adaptive soft coefficient matching (ASCM) as described in [Coupe11]_ is an
 improved extension of non-local means (NLMEANS) denoising. ASCM gives a better
-denoised images from two standard non-local means denoised versions of the
+denoised image from two standard non-local means denoised versions of the
 original data with different degrees sharpness. Here, one denoised input is
 more "smooth" than the other (the easiest way to achieve this denoising is use
 ``non_local_means`` with two different patch radii).
 
-ASCM involves these basic steps
+ASCM involves these basic steps:
 
-* Computes wavelet decomposition of the noisy as well as denoised inputs
+* Computes wavelet decomposition of the noisy as well as denoised inputs.
 
 * Combines the wavelets for the output image in a way that it takes it's
   smoothness (low frequency components) from the input with larger smoothing,
@@ -25,17 +25,16 @@ of the image features.
 Let us load the necessary modules
 """
 
-import numpy as np
-import matplotlib.pyplot as plt
-from dipy.core.gradients import gradient_table
 from dipy.data import get_fnames
+from dipy.core.gradients import gradient_table
 from dipy.denoise.noise_estimate import estimate_sigma
-from dipy.io.image import load_nifti, save_nifti
-from dipy.io.gradients import read_bvals_bvecs
-from time import time
 from dipy.denoise.non_local_means import non_local_means
 from dipy.denoise.adaptive_soft_matching import adaptive_soft_matching
-
+from dipy.io.image import load_nifti, save_nifti
+from dipy.io.gradients import read_bvals_bvecs
+import matplotlib.pyplot as plt
+import numpy as np
+from time import time
 """
 Choose one of the data from the datasets in dipy_
 """
@@ -98,7 +97,7 @@ den_final = adaptive_soft_matching(data, den_small, den_large, sigma[0])
 print("total time", time() - t)
 
 """
-To access the quality of this denoising procedure, we plot the an axial slice
+To access the quality of this denoising procedure, we plot an axial slice
 of the original data, it's denoised output and residuals.
 """
 
