@@ -27,6 +27,8 @@ from dipy.workflows.segment import MedianOtsuFlow
 processing section.
 """
 
+from dipy.workflows.flow_runner import run_flow
+
 
 class DenoiseAndSegment(CombinedWorkflow):
 
@@ -108,7 +110,6 @@ command line, you need this last bit of code. It is usually in an executable
 file located in ``bin``.
 """
 
-from dipy.workflows.flow_runner import run_flow
 """
 This is the method that will wrap everything that is needed to make a workflow
 ready then run it.
